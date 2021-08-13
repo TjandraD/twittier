@@ -14,4 +14,8 @@ class Post
 
         return true
     end
+
+    def detect_hashtag
+        return @post_text.downcase.scan(/#(\w+)/).flatten
+    end
 end
