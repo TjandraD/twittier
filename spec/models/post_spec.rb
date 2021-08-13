@@ -1,0 +1,22 @@
+require_relative '../../models/post'
+
+describe Post do
+    before(:each) do
+        @mock_client = double
+        @post_with_attachment = Post.new(id: 1, user_id: 1, post_text: "Hi! This is a post", datetime: DateTime.now)
+        @post_without_attachment = Post.new(id: 1, user_id: 1, post_text: "Hi! This is a post", attachment: "some_file.txt", datetime: DateTime.now)
+        allow(Mysql2::Client).to receive(:new).and_return(@mock_client)
+    end
+
+    describe 'save post' do
+        context 'when given invalid params' do
+            it 'should return false in valid? function' do
+                post = Post.new(id: 1)
+
+                valid_result = post.valid?
+
+                expect(valid_result).to eq(false)
+            end
+        end
+    end
+end
