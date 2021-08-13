@@ -9,7 +9,7 @@ class Post
 
     def valid?
         return false if @user_id.nil?
-        return false if @post_text.nil?
+        return false if @post_text.nil? || @post_text.length > 1000
         return false if @datetime.nil?
 
         return true
