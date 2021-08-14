@@ -5,6 +5,7 @@ describe Post do
         @mock_client = double
         @post_with_attachment = Post.new(id: 1, user_id: 1, post_text: "Hi! This is a post #now. And I'm here on #Singapore", datetime: DateTime.now)
         @post_without_attachment = Post.new(id: 1, user_id: 1, post_text: "Hi! This is a post #now. And I'm here on #Singapore", attachment: "some_file.txt", datetime: DateTime.now)
+        @client_response = {"id" => 1, "user_id" => 1, "post_text" => "Hi! This is a post #now. And I'm here on #Singapore", "datetime" => DateTime.now}
         allow(Mysql2::Client).to receive(:new).and_return(@mock_client)
     end
 
@@ -16,6 +17,21 @@ describe Post do
                 valid_result = post.valid?
 
                 expect(valid_result).to eq(false)
+            end
+        end
+
+        context 'when given valid params and no attachment' do
+            it 'should save post data' do
+                mock_query = "INSERT INTO posts (user_id, post_text, datetime) VALUES (#{@post_without_attachment.user_id}, '#{@post_without_attachment.post_text}', #{@post_without_attachment.datetime})"
+                mock_query_get = "SELECT * FROM posts WHERE id = 1"
+
+                allow(@mock_client).to receive(:last_id).and_return(1)
+                allow(@mock_client).to receive(:query).with(mock_query)
+                allow(@mock_client).to receive(:query).with(mock_query_get).and_return([@client_response])
+
+                expected_result = @post_without_attachment.save_post
+
+                expect(expected_result).to eq(500)
             end
         end
     end

@@ -1,4 +1,6 @@
 class Post
+    attr_reader :user_id, :post_text, :datetime
+
     def initialize(params)
         @id = params[:id]
         @user_id = params[:user_id]
@@ -17,5 +19,20 @@ class Post
 
     def detect_hashtag
         return @post_text.downcase.scan(/#(\w+)/).flatten
+    end
+
+    def save_post
+        return 422 unless self.valid?
+
+        client = create_db_client
+        client.query("INSERT INTO posts (user_id, post_text, datetime) VALUES (#{@user_id}, '#{@post_text}', #{@datetime})")
+        response = client.query("SELECT * FROM posts WHERE id = #{client.last_id}")
+
+        data = response.first
+        post = Post.new({user_id: data["user_id"], post_text: data["post_text"], datetime: data["datetime"]})
+
+        return 200 unless self != post
+
+        return 500
     end
 end
