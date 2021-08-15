@@ -15,5 +15,15 @@ describe Hashtag do
                 expect(valid_result).to eq(true)
             end
         end
+
+        context 'when given invalid params' do
+            it 'should return false in valid? function' do
+                hashtag = Hashtag.new({})
+
+                valid_result = hashtag.valid?
+
+                expect(valid_result).to eq(false)
+            end
+        end
     end
 end
