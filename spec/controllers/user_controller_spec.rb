@@ -7,12 +7,16 @@ describe UserController do
 
     describe 'register user' do
         context 'when given valid params' do
-            stub_model = double
+            it 'should return status 500' do
+                stub_model = double
 
-            allow(User).to receive(:new).with([]).and_return(stub_model)
-            expect(stub_model).to receive(:register).and_return(500)
+                allow(User).to receive(:new).with([]).and_return(stub_model)
+                expect(stub_model).to receive(:register).and_return(500)
 
-            @user_controller.register([])
+                controller_result = @user_controller.register([])
+
+                expect(controller_result).to eq({"status" => 500})
+            end
         end
     end
 end
