@@ -5,6 +5,7 @@ describe Hashtag do
         @mock_client = double
         @hashtag = Hashtag.new(id: 1, hashtag: "hello")
         @client_response = {"id" => 1, "hashtag" => "hello"}
+        @invalid_client_response = {"id" => 1}
         allow(Mysql2::Client).to receive(:new).and_return(@mock_client)
     end
 
@@ -40,6 +41,20 @@ describe Hashtag do
                 function_result = @hashtag.save
 
                 expect(function_result).to eq(200)
+            end
+        end
+
+        context 'when return value is different' do
+            it 'should return 500 status code' do
+                mock_query = "INSERT INTO hashtags (hashtag) VALUES ('#{@hashtag.hashtag}')"
+                mock_query_get = "SELECT * FROM hashtags WHERE hashtag = #{@hashtag.hashtag}"
+
+                allow(@mock_client).to receive(:query).with(mock_query)
+                allow(@mock_client).to receive(:query).with(mock_query_get).and_return([@invalid_client_response])
+
+                function_result = @hashtag.save
+
+                expect(function_result).to eq(500)
             end
         end
     end
