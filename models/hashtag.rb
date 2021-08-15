@@ -30,4 +30,14 @@ class Hashtag
 
         return 500
     end
+
+    def save_post_hashtag(post_id)
+        client = create_db_client
+        response = client.query("SELECT id FROM hashtags WHERE hashtag = #{@hashtag}")
+
+        data = response.first
+        hashtag_id = data["id"]
+
+        client.query("INSERT INTO post_hashtag VALUES (#{post_id}, #{hashtag_id})")
+    end
 end

@@ -58,4 +58,16 @@ describe Hashtag do
             end
         end
     end
+
+    describe 'save post hashtag' do
+        it 'should store post id and hashtag id' do
+            mock_query = "INSERT INTO post_hashtag VALUES (1, 1)"
+            mock_query_get = "SELECT id FROM hashtags WHERE hashtag = #{@hashtag.hashtag}"
+            
+            allow(@mock_client).to receive(:query).with(mock_query_get).and_return(["id" => 1])
+            expect(@mock_client).to receive(:query).with(mock_query)
+
+            @hashtag.save_post_hashtag(1)
+        end
+    end
 end
