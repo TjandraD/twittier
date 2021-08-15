@@ -39,6 +39,8 @@ describe User do
                 allow(@mock_client).to receive(:query).with(mock_query_get).and_return([@client_response])
 
                 function_result = @user.register
+
+                expect(function_result).to eq(200)
             end
         end
 

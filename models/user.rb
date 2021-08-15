@@ -18,6 +18,12 @@ class User
         return true
     end
 
+    def ==(other)
+        @username == other.username &&
+        @email == other.email &&
+        @bio == other.bio
+    end
+
     def register
         return 422 unless self.valid?
 
@@ -28,7 +34,7 @@ class User
         data = response.first
         user = User.new({username: data["username"], email: data["email"], bio: data["bio"]})
 
-        return 200 unless self != user
+        return 200 if self == user
 
         return 500
     end
