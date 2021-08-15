@@ -5,6 +5,7 @@ describe User do
         @mock_client = double
         @user = User.new(id: 1, username: "johndoe", email: "johndoe@email.com", bio: "This is my bio")
         @client_response = {"id" => 1, "username" => "johndoe", "email" => "johndoe@email.com", "bio" => "This is my bio"}
+        @invalid_client_response = {"id" => 1, "email" => "johndoe@email.com", "bio" => "This is my bio"}
         allow(Mysql2::Client).to receive(:new).and_return(@mock_client)
     end
 
@@ -51,6 +52,21 @@ describe User do
                 function_result = user.register
 
                 expect(function_result).to eq(422)
+            end
+        end
+
+        context 'when given valid params and different result' do
+            it 'should return 500 status code' do
+                mock_query = "INSERT INTO users (username, email, bio) VALUES ('#{@user.username}', '#{@user.email}', '#{@user.bio}')"
+                mock_query_get = "SELECT * FROM users WHERE id = 1"
+
+                allow(@mock_client).to receive(:last_id).and_return(1)
+                allow(@mock_client).to receive(:query).with(mock_query)
+                allow(@mock_client).to receive(:query).with(mock_query_get).and_return([@invalid_client_response])
+
+                function_result = @user.register
+
+                expect(function_result).to eq(500)
             end
         end
     end
