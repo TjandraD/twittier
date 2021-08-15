@@ -29,6 +29,12 @@ describe Post do
                 allow(@mock_client).to receive(:query).with(mock_query)
                 allow(@mock_client).to receive(:query).with(mock_query_get).and_return([@client_response])
 
+                stub_hashtag = double
+
+                allow(Hashtag).to receive(:new).and_return(stub_hashtag)
+                allow(stub_hashtag).to receive(:save)
+                allow(stub_hashtag).to receive(:save_post_hashtag)
+
                 expected_result = @post_without_attachment.save_post
 
                 expect(expected_result).to eq(500)

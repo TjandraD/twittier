@@ -1,3 +1,5 @@
+require_relative 'hashtag'
+
 class Post
     attr_reader :user_id, :post_text, :datetime
 
@@ -30,6 +32,13 @@ class Post
 
         data = response.first
         post = Post.new({user_id: data["user_id"], post_text: data["post_text"], datetime: data["datetime"]})
+
+        hashtags = self.detect_hashtag
+        hashtags.each do |hashtag_name|
+            hashtag = Hashtag.new(hashtag: hashtag_name)
+            hashtag.save
+            hashtag.save_post_hashtag(client.last_id)
+        end
 
         return 200 unless self != post
 
