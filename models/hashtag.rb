@@ -51,4 +51,15 @@ class Hashtag
 
     client.close
   end
+
+  def self.search(hashtag)
+    client = create_db_client
+    response = client.query("SELECT * FROM hashtags WHERE hashtag = '#{hashtag.downcase}'")
+
+    client.close
+
+    return response.first['id'] unless response.first.nil?
+
+    nil
+  end
 end

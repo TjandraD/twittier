@@ -48,8 +48,21 @@ describe Post do
                                         'post_text' => @post_with_attachment.post_text,
                                         'timestamp' => nil,
                                         'user_id' => 1
-        })
+                                      })
       end
+    end
+  end
+
+  describe 'search post' do
+    it 'should return all post that having the searched hashtag' do
+      mock_query = 'SELECT * FROM posts JOIN post_hashtag ON post_hashtag.post_id = posts.id WHERE post_hashtag.hashtag_id = 1'
+
+      allow(Hashtag).to receive(:search).with('now').and_return(1)
+      allow(@mock_client).to receive(:query).with(mock_query).and_return([])
+
+      search_result = Post.search('now')
+
+      expect(search_result).to eq([])
     end
   end
 

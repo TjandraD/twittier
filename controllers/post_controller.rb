@@ -16,4 +16,18 @@ class PostController
       'post' => function_result
     }
   end
+
+  def search(params)
+    posts = Post.search(params[:hashtag])
+
+    if posts.nil?
+      return {
+        'posts' => 'No post matched the hashtag'
+      }
+    end
+
+    {
+      'posts' => posts.each
+    }
+  end
 end

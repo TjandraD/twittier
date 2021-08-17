@@ -47,7 +47,8 @@ class Post
     response = client.query("SELECT * FROM posts WHERE id = #{client.last_id}")
 
     data = response.first
-    post = Post.new(id: data['id'], user_id: data['user_id'], post_text: data['post_text'], timestamp: data['timestamp'])
+    post = Post.new(id: data['id'], user_id: data['user_id'], post_text: data['post_text'],
+                    timestamp: data['timestamp'])
 
     post_id = client.last_id
     client.close
@@ -64,5 +65,18 @@ class Post
     else
       500
     end
+  end
+
+  def self.search(hashtag)
+    hashtag_id = Hashtag.search(hashtag)
+
+    return nil if hashtag_id.nil?
+
+    client = create_db_client
+    raw_posts = client.query("SELECT * FROM posts JOIN post_hashtag ON post_hashtag.post_id = posts.id WHERE post_hashtag.hashtag_id = #{hashtag_id}")
+
+    client.close
+
+    raw_posts
   end
 end

@@ -28,3 +28,10 @@ post '/api/new_post' do
   status server_response
   body 'An error occured'
 end
+
+get '/api/search_post' do
+  controller = PostController.new
+  server_response = controller.search(params)
+
+  return server_response.to_json
+end

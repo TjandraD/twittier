@@ -73,4 +73,16 @@ describe Hashtag do
       @hashtag.save_post_hashtag(1)
     end
   end
+
+  describe 'search hashtag' do
+    it 'should return hashtag id' do
+      mock_query = "SELECT * FROM hashtags WHERE hashtag = 'now'"
+
+      allow(@mock_client).to receive(:query).with(mock_query).and_return(['id' => 1])
+
+      query_result = Hashtag.search('now')
+
+      expect(query_result).to eq(1)
+    end
+  end
 end
