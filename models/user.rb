@@ -48,7 +48,6 @@ class User
     user = User.new(id: data['id'], username: data['username'], email: data['email'], bio: data['bio'])
 
     if self == user
-      # response_array = [user.to_map]
       user.to_map
     else
       500

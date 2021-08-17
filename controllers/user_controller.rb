@@ -8,23 +8,12 @@ class UserController
 
     function_result = user.register
 
-    case function_result
-    when 422
-      {
-        'status' => 422,
-        'message' => 'Parameters error, check your parameters again'
-      }
-    when 500
-      {
-        'status' => 500,
-        'message' => 'Internal server error'
-      }
-    else
-      {
-        'status' => 200,
-        'message' => 'Success',
-        'user' => function_result
-      }
-    end
+    return function_result if function_result.is_a?(Integer)
+
+    {
+      'status' => 200,
+      'message' => 'Success',
+      'user' => function_result
+    }
   end
 end

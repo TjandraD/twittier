@@ -18,10 +18,7 @@ describe UserController do
 
         controller_result = @user_controller.register([])
 
-        expect(controller_result).to eq({
-                                          'message' => 'Internal server error',
-                                          'status' => 500
-                                        })
+        expect(controller_result).to eq(500)
       end
     end
 
@@ -34,10 +31,7 @@ describe UserController do
 
         controller_result = @user_controller.register([])
 
-        expect(controller_result).to eq({
-                                          'status' => 422,
-                                          'message' => 'Parameters error, check your parameters again'
-                                        })
+        expect(controller_result).to eq(422)
       end
     end
 

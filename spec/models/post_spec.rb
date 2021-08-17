@@ -43,7 +43,12 @@ describe Post do
 
         expected_result = @post_without_attachment.save_post
 
-        expect(expected_result).to eq(500)
+        expect(expected_result).to eq({
+                                        'id' => @post_without_attachment.id,
+                                        'post_text' => @post_with_attachment.post_text,
+                                        'timestamp' => nil,
+                                        'user_id' => 1
+        })
       end
     end
   end

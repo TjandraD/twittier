@@ -17,7 +17,7 @@ describe PostController do
 
       controller_result = @post_controller.save(@post_params)
 
-      expect(controller_result).to eq({ 'status' => 200 })
+      expect(controller_result).to eq(200)
     end
   end
 end

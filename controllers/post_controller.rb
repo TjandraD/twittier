@@ -6,6 +6,14 @@ class PostController
   def save(params)
     post = Post.new(params)
 
-    { 'status' => 200 } if post.save_post == 200
+    function_result = post.save_post
+
+    return function_result if function_result.is_a?(Integer)
+
+    {
+      'status' => 200,
+      'message' => 'Success',
+      'post' => function_result
+    }
   end
 end

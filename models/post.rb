@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 require_relative 'hashtag'
+require_relative '../db/db_connector'
 
 class Post
-  attr_reader :user_id, :post_text
+  attr_reader :id, :user_id, :post_text
 
   def initialize(params)
     @id = params[:id]
-    @user_id = params[:user_id]
+    @user_id = params[:user_id].to_i
     @post_text = params[:post_text]
     @attachment = params[:attachment]
     @timestamp = params[:timestamp]
@@ -21,12 +22,12 @@ class Post
   end
 
   def detect_hashtag
-    @post_text.downcase.scan(/#(\w+)/).flatten
+    @post_text.downcase.scan(/#(\w+)/).flatten.uniq
   end
 
   def ==(other)
     @user_id == other.user_id &&
-      post_text == other.post_text
+      @post_text == other.post_text
   end
 
   def to_map
@@ -58,8 +59,10 @@ class Post
       hashtag.save_post_hashtag(post_id)
     end
 
-    return 200 unless self == post
-
-    500
+    if self == post
+      post.to_map
+    else
+      500
+    end
   end
 end
