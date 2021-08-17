@@ -29,6 +29,15 @@ class Post
       post_text == other.post_text
   end
 
+  def to_map
+    {
+      'id' => @id,
+      'user_id' => @user_id,
+      'post_text' => @post_text,
+      'timestamp' => @timestamp
+    }
+  end
+
   def save_post
     return 422 unless valid?
 
@@ -37,7 +46,7 @@ class Post
     response = client.query("SELECT * FROM posts WHERE id = #{client.last_id}")
 
     data = response.first
-    post = Post.new(user_id: data['user_id'], post_text: data['post_text'], timestamp: data['timestamp'])
+    post = Post.new(id: data['id'], user_id: data['user_id'], post_text: data['post_text'], timestamp: data['timestamp'])
 
     post_id = client.last_id
     client.close

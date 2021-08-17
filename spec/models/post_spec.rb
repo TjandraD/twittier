@@ -57,4 +57,17 @@ describe Post do
       expect(extracted_hashtag).to eq(expected_hashtag)
     end
   end
+
+  describe 'map post data' do
+    it 'should return map of post data' do
+      map_result = @post_with_attachment.to_map
+
+      expect(map_result).to eq({
+                                 'id' => 1,
+                                 'user_id' => 1,
+                                 'post_text' => "Hi! This is a post #now. And I'm here on #Singapore",
+                                 'timestamp' => nil
+                               })
+    end
+  end
 end
