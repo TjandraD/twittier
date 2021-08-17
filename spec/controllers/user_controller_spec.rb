@@ -53,7 +53,7 @@ describe UserController do
                 expect(controller_result).to eq({
                     "status" => 200,
                     "message" => "Success",
-                    "user" => mock_user_return.each
+                    "user" => mock_user_return
                 })
             end
         end

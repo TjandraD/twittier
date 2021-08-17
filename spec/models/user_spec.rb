@@ -42,7 +42,7 @@ describe User do
 
                 function_result = @user.register
 
-                expect(function_result).to eq([User.new(id: 1, username: "johndoe", email: "johndoe@email.com", bio: "This is my bio")])
+                expect(function_result).to eq(@user.to_map)
             end
         end
 

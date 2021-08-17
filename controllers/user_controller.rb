@@ -20,7 +20,7 @@ class UserController
             return {
                 "status" => 200,
                 "message" => "Success",
-                "user" => function_result.each
+                "user" => function_result
             }
         end
     end
