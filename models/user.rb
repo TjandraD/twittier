@@ -34,10 +34,13 @@ class User
         client.close
 
         data = response.first
-        user = User.new({username: data["username"], email: data["email"], bio: data["bio"]})
+        user = User.new(id: data["id"], username: data["username"], email: data["email"], bio: data["bio"])
 
-        return 200 if self == user
-
-        return 500
+        if (self == user)
+            response_array = [user]
+            return response_array
+        else
+            return 500
+        end
     end
 end
