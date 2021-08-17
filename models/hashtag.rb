@@ -1,52 +1,54 @@
+# frozen_string_literal: true
+
 require_relative '../db/db_connector'
 
 class Hashtag
-    attr_reader :hashtag
+  attr_reader :hashtag
 
-    def initialize(params)
-        @id = params[:id]
-        @hashtag = params[:hashtag]
-    end
+  def initialize(params)
+    @id = params[:id]
+    @hashtag = params[:hashtag]
+  end
 
-    def valid?
-        return false if @hashtag.nil?
+  def valid?
+    return false if @hashtag.nil?
 
-        return true
-    end
+    true
+  end
 
-    def ==(other)
-        @hashtag == other.hashtag
-    end
+  def ==(other)
+    @hashtag == other.hashtag
+  end
 
-    def save
-        return 422 unless self.valid?
-        
-        client = create_db_client
-        exists_hashtag = client.query("SELECT * FROM hashtags WHERE hashtag = '#{@hashtag}'")
+  def save
+    return 422 unless valid?
 
-        client.query("INSERT INTO hashtags (hashtag) VALUES ('#{@hashtag}')") if exists_hashtag.first.nil?
-        response = client.query("SELECT * FROM hashtags WHERE hashtag = '#{@hashtag}'")
+    client = create_db_client
+    exists_hashtag = client.query("SELECT * FROM hashtags WHERE hashtag = '#{@hashtag}'")
 
-        data = response.first
-        hashtag = Hashtag.new(id: data["id"], hashtag: data["hashtag"])
+    client.query("INSERT INTO hashtags (hashtag) VALUES ('#{@hashtag}')") if exists_hashtag.first.nil?
+    response = client.query("SELECT * FROM hashtags WHERE hashtag = '#{@hashtag}'")
 
-        client.close
+    data = response.first
+    hashtag = Hashtag.new(id: data['id'], hashtag: data['hashtag'])
 
-        return 200 if self == hashtag
+    client.close
 
-        return 500
-    end
+    return 200 if self == hashtag
 
-    def save_post_hashtag(post_id)
-        client = create_db_client
+    500
+  end
 
-        response = client.query("SELECT id FROM hashtags WHERE hashtag = '#{@hashtag}'")
+  def save_post_hashtag(post_id)
+    client = create_db_client
 
-        data = response.first
-        hashtag_id = data["id"]
+    response = client.query("SELECT id FROM hashtags WHERE hashtag = '#{@hashtag}'")
 
-        client.query("INSERT INTO post_hashtag VALUES (#{post_id}, #{hashtag_id})")
+    data = response.first
+    hashtag_id = data['id']
 
-        client.close
-    end
+    client.query("INSERT INTO post_hashtag VALUES (#{post_id}, #{hashtag_id})")
+
+    client.close
+  end
 end
