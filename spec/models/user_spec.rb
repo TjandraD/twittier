@@ -71,4 +71,17 @@ describe User do
             end
         end
     end
+
+    describe 'map user data' do
+        it 'should return map of user data' do
+            map_result = @user.to_map
+
+            expect(map_result).to eq({
+                "id" => 1,
+                "username" => "johndoe",
+                "email" => "johndoe@email.com",
+                "bio" => "This is my bio"
+                })
+        end
+    end
 end

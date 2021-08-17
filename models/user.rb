@@ -24,6 +24,15 @@ class User
         @bio == other.bio
     end
 
+    def to_map
+        return {
+            "id" => @id,
+            "username" => @username,
+            "email" => @email,
+            "bio" => @bio
+        }
+    end
+
     def register
         return 422 unless self.valid?
 
