@@ -103,7 +103,7 @@ CREATE TABLE `posts` (
   `user_id` int NOT NULL,
   `post_text` text,
   `attachment` varchar(50) DEFAULT NULL,
-  `datetime` datetime DEFAULT NULL,
+  `timestamp` timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
