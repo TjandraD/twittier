@@ -16,20 +16,29 @@ describe UserController do
 
                 controller_result = @user_controller.register([])
 
-                expect(controller_result).to eq({"status" => 500})
+                expect(controller_result).to eq({
+                    "message" => "Internal server error",
+                    "status" => 500
+                    })
             end
         end
 
         context 'when given valid params' do
             it 'should return status 200' do
                 stub_model = double
+                mock_user_return = double
                 
                 allow(User).to receive(:new).with(@user_params).and_return(stub_model)
-                expect(stub_model).to receive(:register).and_return(200)
+                allow(stub_model).to receive(:register).and_return(mock_user_return)
+                allow(mock_user_return).to receive(:each)
 
                 controller_result = @user_controller.register(@user_params)
 
-                expect(controller_result).to eq({"status" => 200})
+                expect(controller_result).to eq({
+                    "status" => 200,
+                    "message" => "Success",
+                    "user" => mock_user_return.each
+                })
             end
         end
     end
