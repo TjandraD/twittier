@@ -7,7 +7,7 @@ describe UserController do
     end
 
     describe 'register user' do
-        context 'when given invalid params' do
+        context 'when having server error' do
             it 'should return status 500' do
                 stub_model = double
 
@@ -19,6 +19,22 @@ describe UserController do
                 expect(controller_result).to eq({
                     "message" => "Internal server error",
                     "status" => 500
+                    })
+            end
+        end
+
+        context 'when given invalid params' do
+            it 'should return status 422' do
+                stub_model = double
+
+                allow(User).to receive(:new).with([]).and_return(stub_model)
+                expect(stub_model).to receive(:register).and_return(422)
+
+                controller_result = @user_controller.register([])
+
+                expect(controller_result).to eq({
+                    "status" => 422,
+                    "message" => "Parameters error, check your parameters again"
                     })
             end
         end
