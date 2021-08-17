@@ -7,6 +7,7 @@ describe Hashtag do
         @client_response = {"id" => 1, "hashtag" => "hello"}
         @invalid_client_response = {"id" => 1}
         allow(Mysql2::Client).to receive(:new).and_return(@mock_client)
+        allow(@mock_client).to receive(:close)
     end
 
     describe 'initialize hashtag' do
@@ -33,7 +34,7 @@ describe Hashtag do
         context 'when given valid params' do
             it 'should save a new hashtag' do
                 mock_query = "INSERT INTO hashtags (hashtag) VALUES ('#{@hashtag.hashtag}')"
-                mock_query_get = "SELECT * FROM hashtags WHERE hashtag = #{@hashtag.hashtag}"
+                mock_query_get = "SELECT * FROM hashtags WHERE hashtag = '#{@hashtag.hashtag}'"
 
                 allow(@mock_client).to receive(:query).with(mock_query)
                 allow(@mock_client).to receive(:query).with(mock_query_get).and_return([@client_response])
@@ -47,7 +48,7 @@ describe Hashtag do
         context 'when return value is different' do
             it 'should return 500 status code' do
                 mock_query = "INSERT INTO hashtags (hashtag) VALUES ('#{@hashtag.hashtag}')"
-                mock_query_get = "SELECT * FROM hashtags WHERE hashtag = #{@hashtag.hashtag}"
+                mock_query_get = "SELECT * FROM hashtags WHERE hashtag = '#{@hashtag.hashtag}'"
 
                 allow(@mock_client).to receive(:query).with(mock_query)
                 allow(@mock_client).to receive(:query).with(mock_query_get).and_return([@invalid_client_response])
@@ -62,7 +63,7 @@ describe Hashtag do
     describe 'save post hashtag' do
         it 'should store post id and hashtag id' do
             mock_query = "INSERT INTO post_hashtag VALUES (1, 1)"
-            mock_query_get = "SELECT id FROM hashtags WHERE hashtag = #{@hashtag.hashtag}"
+            mock_query_get = "SELECT id FROM hashtags WHERE hashtag = '#{@hashtag.hashtag}'"
             
             allow(@mock_client).to receive(:query).with(mock_query_get).and_return(["id" => 1])
             expect(@mock_client).to receive(:query).with(mock_query)

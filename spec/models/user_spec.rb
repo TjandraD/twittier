@@ -7,6 +7,7 @@ describe User do
         @client_response = {"id" => 1, "username" => "johndoe", "email" => "johndoe@email.com", "bio" => "This is my bio"}
         @invalid_client_response = {"id" => 1, "email" => "johndoe@email.com", "bio" => "This is my bio"}
         allow(Mysql2::Client).to receive(:new).and_return(@mock_client)
+        allow(@mock_client).to receive(:close)
     end
 
     describe 'initialize user' do

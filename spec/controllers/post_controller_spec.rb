@@ -3,7 +3,7 @@ require_relative '../../controllers/post_controller'
 describe PostController do
     before(:each) do
         @post_controller = PostController.new
-        @post_params = {id: 1, user_id: 1, post_text: "Hi, this is a post", datetime: DateTime.now}
+        @post_params = {id: 1, user_id: 1, post_text: "Hi, this is a post"}
     end
 
     describe 'save post' do

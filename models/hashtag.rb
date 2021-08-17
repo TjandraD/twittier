@@ -1,3 +1,5 @@
+require_relative '../db/db_connector'
+
 class Hashtag
     attr_reader :hashtag
 
@@ -20,11 +22,15 @@ class Hashtag
         return 422 unless self.valid?
         
         client = create_db_client
-        client.query("INSERT INTO hashtags (hashtag) VALUES ('#{@hashtag}')")
-        response = client.query("SELECT * FROM hashtags WHERE hashtag = #{@hashtag}")
+        exists_hashtag = client.query("SELECT * FROM hashtags WHERE hashtag = '#{@hashtag}'")
+
+        client.query("INSERT INTO hashtags (hashtag) VALUES ('#{@hashtag}')") if exists_hashtag.first.nil?
+        response = client.query("SELECT * FROM hashtags WHERE hashtag = '#{@hashtag}'")
 
         data = response.first
         hashtag = Hashtag.new(id: data["id"], hashtag: data["hashtag"])
+
+        client.close
 
         return 200 if self == hashtag
 
@@ -33,11 +39,14 @@ class Hashtag
 
     def save_post_hashtag(post_id)
         client = create_db_client
-        response = client.query("SELECT id FROM hashtags WHERE hashtag = #{@hashtag}")
+
+        response = client.query("SELECT id FROM hashtags WHERE hashtag = '#{@hashtag}'")
 
         data = response.first
         hashtag_id = data["id"]
 
         client.query("INSERT INTO post_hashtag VALUES (#{post_id}, #{hashtag_id})")
+
+        client.close
     end
 end

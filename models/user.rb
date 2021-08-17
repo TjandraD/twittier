@@ -31,6 +31,8 @@ class User
         client.query("INSERT INTO users (username, email, bio) VALUES ('#{@username}', '#{@email}', '#{@bio}')")
         response = client.query("SELECT * FROM users WHERE id = #{client.last_id}")
 
+        client.close
+
         data = response.first
         user = User.new({username: data["username"], email: data["email"], bio: data["bio"]})
 

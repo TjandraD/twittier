@@ -3,10 +3,11 @@ require_relative '../../models/post'
 describe Post do
     before(:each) do
         @mock_client = double
-        @post_with_attachment = Post.new(id: 1, user_id: 1, post_text: "Hi! This is a post #now. And I'm here on #Singapore", datetime: DateTime.now)
-        @post_without_attachment = Post.new(id: 1, user_id: 1, post_text: "Hi! This is a post #now. And I'm here on #Singapore", attachment: "some_file.txt", datetime: DateTime.now)
+        @post_with_attachment = Post.new(id: 1, user_id: 1, post_text: "Hi! This is a post #now. And I'm here on #Singapore")
+        @post_without_attachment = Post.new(id: 1, user_id: 1, post_text: "Hi! This is a post #now. And I'm here on #Singapore", attachment: "some_file.txt")
         @client_response = {"id" => 1, "user_id" => 1, "post_text" => "Hi! This is a post #now. And I'm here on #Singapore", "datetime" => DateTime.now}
         allow(Mysql2::Client).to receive(:new).and_return(@mock_client)
+        allow(@mock_client).to receive(:close)
     end
 
     describe 'save post' do
@@ -22,7 +23,7 @@ describe Post do
 
         context 'when given valid params and no attachment' do
             it 'should save post data' do
-                mock_query = "INSERT INTO posts (user_id, post_text, datetime) VALUES (#{@post_without_attachment.user_id}, '#{@post_without_attachment.post_text}', #{@post_without_attachment.datetime})"
+                mock_query = "INSERT INTO posts (user_id, post_text) VALUES (#{@post_without_attachment.user_id}, '#{@post_without_attachment.post_text}')"
                 mock_query_get = "SELECT * FROM posts WHERE id = 1"
 
                 allow(@mock_client).to receive(:last_id).and_return(1)
