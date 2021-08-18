@@ -65,7 +65,7 @@ class Hashtag
 
   def self.trending_hashtags
     client = create_db_client
-    response = client.query("SELECT hashtags.hashtag, COUNT(hashtags.name) FROM hashtags JOIN post_hashtag ON post_hashtag.hashtag_id = hashtags.id JOIN posts ON posts.id = post_hashtag.post_id WHERE posts.timestamp > DATE_SUB(CURDATE(), INTERVAL 1 DAY) GROUP BY hashtags.name ORDER BY COUNT(hashtags.name) DESC LIMIT 5")
+    response = client.query('SELECT hashtags.hashtag FROM hashtags JOIN post_hashtag ON post_hashtag.hashtag_id = hashtags.id JOIN posts ON posts.id = post_hashtag.post_id WHERE posts.timestamp > DATE_SUB(CURDATE(), INTERVAL 1 DAY) GROUP BY hashtags.hashtag ORDER BY COUNT(hashtags.hashtag) DESC LIMIT 5')
 
     client.close
 
