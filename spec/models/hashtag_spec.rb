@@ -85,4 +85,17 @@ describe Hashtag do
       expect(query_result).to eq(1)
     end
   end
+
+  describe 'get trending hashtags' do
+    it 'should return list of top 5 trending hashtags' do
+      stub_return = double
+      mock_query = "SELECT hashtags.hashtag, COUNT(hashtags.name) FROM hashtags JOIN post_hashtag ON post_hashtag.hashtag_id = hashtags.id JOIN posts ON posts.id = post_hashtag.post_id WHERE posts.timestamp > DATE_SUB(CURDATE(), INTERVAL 1 DAY) GROUP BY hashtags.name ORDER BY COUNT(hashtags.name) DESC LIMIT 5"
+
+      allow(@mock_client).to receive(:query).with(mock_query).and_return(stub_return)
+
+      query_result = Hashtag.trending_hashtags
+
+      expect(query_result).to eq(stub_return)
+    end
+  end
 end
