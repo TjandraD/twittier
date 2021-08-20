@@ -10,7 +10,7 @@ describe Post do
     @post_without_attachment = Post.new(id: 1, user_id: 1,
                                         post_text: "Hi! This is a post #now. And I'm here on #Singapore", attachment: 'some_file.txt')
     @client_response = { 'id' => 1, 'user_id' => 1,
-                         'post_text' => "Hi! This is a post #now. And I'm here on #Singapore", 'datetime' => DateTime.now }
+                         'post_text' => "Hi! This is a post #now. And I'm here on #Singapore", 'timestamp' => nil }
     @invalid_client_response = { 'id' => 1 }
     allow(Mysql2::Client).to receive(:new).and_return(@mock_client)
     allow(@mock_client).to receive(:close)
@@ -72,6 +72,26 @@ describe Post do
                                         'user_id' => 1
                                       })
       end
+    end
+  end
+
+  describe 'save comment' do
+    it 'should save comment as a post' do
+      mock_query = "INSERT INTO comments VALUES (2, #{@post_without_attachment.id})"
+      mock_query_get = "SELECT comment_id FROM comments WHERE comment_id = #{@post_without_attachment.id}"
+
+      allow(@post_without_attachment).to receive(:save_post).and_return(@client_response)
+      allow(@mock_client).to receive(:query).with(mock_query)
+      allow(@mock_client).to receive(:query).with(mock_query_get).and_return([ 'comment_id' => 1 ])
+
+      expected_result = @post_without_attachment.save_comment(2)
+
+      expect(expected_result).to eq({
+                                      'id' => @post_without_attachment.id,
+                                      'post_text' => @post_with_attachment.post_text,
+                                      'timestamp' => nil,
+                                      'user_id' => 1
+                                    })
     end
   end
 
