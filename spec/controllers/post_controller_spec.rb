@@ -29,6 +29,25 @@ describe PostController do
     end
   end
 
+  describe 'save comment' do
+    it 'should call save_comment method from Post class' do
+      stub_model = double
+      mock_post_return = double
+
+      allow(Post).to receive(:new).with(@post_params).and_return(stub_model)
+      allow(stub_model).to receive(:save_comment).and_return(mock_post_return)
+      allow(mock_post_return).to receive(:each)
+
+      controller_result = @post_controller.save_comment(@post_params)
+
+      expect(controller_result).to eq({
+                                        'status' => 200,
+                                        'message' => 'Success',
+                                        'comment' => mock_post_return
+                                      })
+    end
+  end
+
   describe 'search post' do
     context 'when a minimum of a post found' do
       it 'should return posts which contains the desired hashtag' do

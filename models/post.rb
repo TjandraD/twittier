@@ -70,9 +70,13 @@ class Post
   def save_comment(original_post_id)
     comment_post = save_post
 
+    return comment_post if comment_post.is_a?(Integer)
+
     client = create_db_client
     client.query("INSERT INTO comments VALUES (#{original_post_id}, #{comment_post['id']})")
     response = client.query("SELECT comment_id FROM comments WHERE comment_id = #{comment_post['id']}")
+
+    client.close
 
     data = response.first
     return comment_post if data['comment_id'] == comment_post['id']

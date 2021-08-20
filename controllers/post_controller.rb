@@ -17,6 +17,20 @@ class PostController
     }
   end
 
+  def save_comment(params)
+    post = Post.new(params)
+
+    function_result = post.save_comment(params[:original_post].to_i)
+
+    return function_result if function_result.is_a?(Integer)
+
+    {
+      'status' => 200,
+      'message' => 'Success',
+      'comment' => function_result
+    }
+  end
+
   def search(params)
     posts = Post.search(params[:hashtag])
 

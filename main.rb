@@ -30,6 +30,16 @@ post '/api/new_post' do
   body 'An error occured'
 end
 
+post '/api/save_comment' do
+  controller = PostController.new
+  server_response = controller.save_comment(params)
+
+  return server_response.to_json unless server_response.is_a?(Integer)
+
+  status server_response
+  body 'An error occured'
+end
+
 get '/api/search_post' do
   controller = PostController.new
   server_response = controller.search(params)
