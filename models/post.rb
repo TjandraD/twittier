@@ -1,16 +1,17 @@
 # frozen_string_literal: true
 
 require_relative 'hashtag'
+require_relative 'attachment'
 require_relative '../db/db_connector'
 
 class Post
-  attr_reader :id, :user_id, :post_text
+  attr_reader :id, :user_id, :post_text, :attachment
 
   def initialize(params)
     @id = params[:id]
     @user_id = params[:user_id].to_i
     @post_text = params[:post_text]
-    @attachment = params[:attachment]
+    @attachment = Attachment.new(params[:attachment]) unless params[:attachment].nil?
     @timestamp = params[:timestamp]
   end
 
@@ -43,7 +44,13 @@ class Post
     return 422 unless valid?
 
     client = create_db_client
-    client.query("INSERT INTO posts (user_id, post_text) VALUES (#{@user_id}, '#{@post_text}')")
+    if @attachment.nil?
+      client.query("INSERT INTO posts (user_id, post_text) VALUES (#{@user_id}, '#{@post_text}')")
+    else
+      @attachment.save
+      client.query("INSERT INTO posts (user_id, post_text, attachment) VALUES (#{@user_id}, '#{@post_text}', '#{@attachment.filename}')")
+    end
+
     response = client.query("SELECT * FROM posts WHERE id = #{client.last_id}")
 
     data = response.first
