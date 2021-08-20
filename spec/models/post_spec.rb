@@ -76,22 +76,39 @@ describe Post do
   end
 
   describe 'save comment' do
-    it 'should save comment as a post' do
-      mock_query = "INSERT INTO comments VALUES (2, #{@post_without_attachment.id})"
-      mock_query_get = "SELECT comment_id FROM comments WHERE comment_id = #{@post_without_attachment.id}"
+    context 'when data is successfully saved' do
+      it 'should save comment as a post' do
+        mock_query = "INSERT INTO comments VALUES (2, #{@post_without_attachment.id})"
+        mock_query_get = "SELECT comment_id FROM comments WHERE comment_id = #{@post_without_attachment.id}"
 
-      allow(@post_without_attachment).to receive(:save_post).and_return(@client_response)
-      allow(@mock_client).to receive(:query).with(mock_query)
-      allow(@mock_client).to receive(:query).with(mock_query_get).and_return([ 'comment_id' => 1 ])
+        allow(@post_without_attachment).to receive(:save_post).and_return(@client_response)
+        allow(@mock_client).to receive(:query).with(mock_query)
+        allow(@mock_client).to receive(:query).with(mock_query_get).and_return(['comment_id' => 1])
 
-      expected_result = @post_without_attachment.save_comment(2)
+        expected_result = @post_without_attachment.save_comment(2)
 
-      expect(expected_result).to eq({
-                                      'id' => @post_without_attachment.id,
-                                      'post_text' => @post_with_attachment.post_text,
-                                      'timestamp' => nil,
-                                      'user_id' => 1
-                                    })
+        expect(expected_result).to eq({
+                                        'id' => @post_without_attachment.id,
+                                        'post_text' => @post_with_attachment.post_text,
+                                        'timestamp' => nil,
+                                        'user_id' => 1
+                                      })
+      end
+    end
+
+    context 'when data is not saved successfully' do
+      it 'should return 500 status code' do
+        mock_query = "INSERT INTO comments VALUES (2, #{@post_without_attachment.id})"
+        mock_query_get = "SELECT comment_id FROM comments WHERE comment_id = #{@post_without_attachment.id}"
+
+        allow(@post_without_attachment).to receive(:save_post).and_return(@client_response)
+        allow(@mock_client).to receive(:query).with(mock_query)
+        allow(@mock_client).to receive(:query).with(mock_query_get).and_return(['comment_id' => nil])
+
+        expected_result = @post_without_attachment.save_comment(2)
+
+        expect(expected_result).to eq(500)
+      end
     end
   end
 
