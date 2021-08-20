@@ -7,10 +7,11 @@ describe Post do
     @mock_client = double
     @mock_tempfile = double
     @stub_attachment = double
-    allow(Attachment).to receive(:new).with(filename: 'something.txt', tempfile: @mock_tempfile).and_return(@stub_attachment)
+    allow(Attachment).to receive(:new).with(filename: 'something.txt',
+                                            tempfile: @mock_tempfile).and_return(@stub_attachment)
     @post = Post.new(id: 1, user_id: 1,
-                                     post_text: "Hi! This is a post #now. And I'm here on #Singapore",
-                                     attachment: { filename: 'something.txt', tempfile: @mock_tempfile })
+                     post_text: "Hi! This is a post #now. And I'm here on #Singapore",
+                     attachment: { filename: 'something.txt', tempfile: @mock_tempfile })
     @client_response = { 'id' => 1, 'user_id' => 1,
                          'post_text' => "Hi! This is a post #now. And I'm here on #Singapore", 'timestamp' => nil }
     @invalid_client_response = { 'id' => 1 }
@@ -58,7 +59,8 @@ describe Post do
         mock_query_get = 'SELECT * FROM posts WHERE id = 1'
         mock_attachment = double
 
-        allow(Attachment).to receive(:new).with(filename: 'something.txt', tempfile: @mock_tempfile).and_return(mock_attachment)
+        allow(Attachment).to receive(:new).with(filename: 'something.txt',
+                                                tempfile: @mock_tempfile).and_return(mock_attachment)
         allow(mock_attachment).to receive(:filename).and_return('something.txt')
 
         allow(@mock_client).to receive(:last_id).and_return(1)
@@ -89,7 +91,8 @@ describe Post do
         mock_query_get = 'SELECT * FROM posts WHERE id = 1'
         mock_attachment = double
 
-        allow(Attachment).to receive(:new).with(filename: 'something.txt', tempfile: @mock_tempfile).and_return(mock_attachment)
+        allow(Attachment).to receive(:new).with(filename: 'something.txt',
+                                                tempfile: @mock_tempfile).and_return(mock_attachment)
         allow(mock_attachment).to receive(:filename).and_return('something.txt')
 
         allow(@mock_client).to receive(:last_id).and_return(1)
