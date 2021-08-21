@@ -1,0 +1,332 @@
+{
+	"info": {
+		"_postman_id": "1ae1330f-e3e5-4a03-b527-98aa6b326d65",
+		"name": "Twittier",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User Registration",
+			"item": [
+				{
+					"name": "User Registration",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check User Registration Response\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.user.username).to.eql(\"johndoe\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "johndoe",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "johndoe@email.com",
+									"type": "text"
+								},
+								{
+									"key": "bio",
+									"value": "This is my bio",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{twittier_url}}/registration",
+							"host": [
+								"{{twittier_url}}"
+							],
+							"path": [
+								"registration"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Save Post",
+			"item": [
+				{
+					"name": "Save Post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check Save Post Response\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.post.post_text).to.eql(\"Hi! This is a post #now. And Im here on #Singapore #Singapore\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "user_id",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "post_text",
+									"value": "Hi! This is a post #now. And Im here on #Singapore #Singapore",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{twittier_url}}/new_post",
+							"host": [
+								"{{twittier_url}}"
+							],
+							"path": [
+								"new_post"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Save Post With Attachment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check Save Post Response\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.post.post_text).to.eql(\"Hi! This is a post #now. And Im here on #Singapore #Singapore\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "user_id",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "post_text",
+									"value": "Hi! This is a post #now. And Im here on #Singapore #Singapore",
+									"type": "text"
+								},
+								{
+									"key": "attachment",
+									"type": "file",
+									"src": "/home/tjandra/Pictures/Wallpaper/WHA Norway.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{twittier_url}}/new_post",
+							"host": [
+								"{{twittier_url}}"
+							],
+							"path": [
+								"new_post"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Search Post by Hashtag",
+			"item": [
+				{
+					"name": "Search Post by Hashtag",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check Search Post by Hashtag Response\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.posts.length > 0).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "hashtag",
+									"value": "now",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{twittier_url}}/search_post",
+							"host": [
+								"{{twittier_url}}"
+							],
+							"path": [
+								"search_post"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Trending Hashtags",
+			"item": [
+				{
+					"name": "Trending Hashtags",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check Trending Hashtags Response\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.hashtags.length > 0).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{twittier_url}}/trending_hashtags",
+							"host": [
+								"{{twittier_url}}"
+							],
+							"path": [
+								"trending_hashtags"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Save Comment",
+			"item": [
+				{
+					"name": "Save Comment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.comment.post_text).to.eql(\"Hi! This is a #post\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "user_id",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "post_text",
+									"value": "Hi! This is a #post",
+									"type": "text"
+								},
+								{
+									"key": "original_post",
+									"value": "2",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{twittier_url}}/save_comment",
+							"host": [
+								"{{twittier_url}}"
+							],
+							"path": [
+								"save_comment"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
