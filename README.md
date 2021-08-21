@@ -9,6 +9,7 @@
 | [Commands Before Run The App](#steps-to-do-before-run-the-app) |
 | [Run Tests and App](#run-tests-suit-and-application) |
 | [API Testing](#api-testing) |
+| [API Documentation](#api-documentation) |
 
 ## Brief Description
 Twittier is created as a social media application which can be used to share information with other people. This application will only be used by people that work in a certain company so we cannot use existing public social media.
@@ -47,3 +48,6 @@ For this project, Postman Collection was used to test the API endpoints.
   - Set value to `http://35.243.114.125:4567/api` for the production url
   - If you would like to run it locally, set the value to `127.0.0.1:4567/api`
 - Run the API Tests (using [Collection Runner](https://learning.postman.com/docs/running-collections/intro-to-collection-runs/#starting-a-collection-run))
+
+## API Documentation
+For a detailed documentation for this API, go check this [Postman Documentation](https://documenter.getpostman.com/view/10176261/TzzDHuWw)
