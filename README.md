@@ -38,7 +38,23 @@ Twittier is created as a social media application which can be used to share inf
 
 ## Run Tests Suit and Application
 - Run Tests `rspec`
-- Run The App `ruby main.rb`
+
+### Run The App Manually
+
+- Execute the command below
+
+```bash
+ruby main.rb
+```
+
+### Run The App With Docker
+
+- Execute the command below
+
+```bash
+docker build -t YOUR_IMAGES_NAME .
+docker run -p 4567:4567 -d YOUR_IMAGES_NAME
+```
 
 ## API Testing
 For this project, Postman Collection was used to test the API endpoints.
